@@ -166,6 +166,8 @@ module Paypal
           # Encrypt the signed data with Paypal's public certificate.
           encrypted = OpenSSL::PKCS7::encrypt([paypal_cert], signed.to_der, OpenSSL::Cipher::Cipher::new("DES3"), OpenSSL::PKCS7::BINARY)
 
+          encrypted = encrypted.to_s.gsub(/\n/, '')
+
           # The command for encrypted forms is always '_s-xclick'; the real command is in the encrypted data.
           button << tag(:input, :type => 'hidden', :name => 'cmd', :value => "_s-xclick")
           button << tag(:input, :type => 'hidden', :name => 'encrypted', :value => encrypted)
